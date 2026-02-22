@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奶KATの插件宝库</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: #0c0c1a;
+  color: #e6e6ff;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* 发光标题 */
+.header {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #111125, #1a1a35);
+  border-bottom: 1px solid #444488;
+}
+
+.title {
+  font-size: 42px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 
+    0 0 5px #9381ff,
+    0 0 15px #9381ff,
+    0 0 30px #b19fff,
+    0 0 60px #c8b6ff;
+  animation: glow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 5px #9381ff,0 0 15px #9381ff,0 0 30px #b19fff; }
+  to { text-shadow: 0 0 10px #9381ff,0 0 25px #9381ff,0 0 50px #c8b6ff; }
+}
+
+.subtitle {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #aaaaff;
+}
+
+/* 卡片容器 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+/* 插件卡片 */
+.card {
+  background: #15152b;
+  border-radius: 16px;
+  padding: 22px;
+  border: 1px solid #333366;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(147,129,255,0.2);
+  border-color: #9381ff;
+}
+
+.card-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #f0efff;
+  margin-bottom: 10px;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: #c0c0e0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 详情页 */
+.detail {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #15152b;
+  border-radius: 20px;
+  padding: 40px;
+  border: 1px solid #444488;
+  display: none;
+}
+
+.detail.active {
+  display: block;
+}
+
+.detail-title {
+  font-size: 32px;
+  color: #fff;
+  text-shadow: 0 0 10px #9381ff;
+  margin-bottom: 20px;
+}
+
+/* 彩色标签（仿GitHub） */
+.tag {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin: 4px 6px 4px 0;
+  font-weight: 500;
+}
+
+.tag-name { background: #7769ff; color: white; }
+.tag-author { background: #34d399; color: #111; }
+.tag-version { background: #f59e0b; color: white; }
+.tag-time { background: #60a5fa; color: white; }
+.tag-license { background: #ec4899; color: white; }
+.tag-sealver { background: #8b5cf6; color: white; }
+
+.detail-info {
+  margin: 20px 0;
+  line-height: 1.7;
+}
+
+.desc-box {
+  background: #111122;
+  padding: 18px;
+  border-radius: 10px;
+  margin: 20px 0;
+  border-left: 3px solid #9381ff;
+}
+
+.download-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  background: linear-gradient(90deg, #9381ff, #b19fff);
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.download-btn:hover {
+  box-shadow: 0 0 15px #9381ff;
+}
+
+.back-btn {
+  padding: 8px 20px;
+  background: #222244;
+  color: #ccccee;
+  border: 1px solid #555599;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+/* 管理员面板 */
+.admin-panel {
+  max-width: 800px;
+  margin: 40px auto;
+  background: #15152b;
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid #ff5577;
+  display: none;
+}
+
+.admin-panel.active {
+  display: block;
+}
+
+.admin-title {
+  color: #ff88aa;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background: #111122;
+  border: 1px solid #444477;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+}
+
+button {
+  padding: 10px 22px;
+  background: #9381ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.admin-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ff4477;
+  color: white;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 10px #ff4477;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="title">奶KATの插件宝库</div>
+  <div class="subtitle">SealDice 专用 JS 扩展中心 | sealdice.js_code.list.naikat.xyz</div>
+</div>
+
+<!-- 卡片列表 -->
+<div id="list" class="container">
+  <!-- 插件会动态渲染在这里 -->
+</div>
+
+<!-- 详情页 -->
+<div id="detail" class="detail">
+  <button class="back-btn" onclick="goBack()">← 返回列表</button>
+  <div class="detail-title" id="d-name"></div>
+  <div id="d-tags"></div>
+  <div class="desc-box" id="d-desc"></div>
+  <div class="detail-info" id="d-info"></div>
+  <button class="download-btn" id="d-down">下载 JS 文件</button>
+</div>
+
+<!-- 管理员面板 -->
+<div class="admin-panel" id="admin">
+  <div class="admin-title">管理员后台 · 上架/下架插件</div>
+  <input type="text" placeholder="验证码" id="code">
+  <button onclick="checkCode()">验证登录</button>
+  <hr style="margin:20px 0;border-color:#444">
+  <textarea rows="8" placeholder="粘贴完整 JS 代码（自动解析头部元数据）" id="js-code"></textarea>
+  <button onclick="uploadPlugin()">上架插件</button>
+  <button onclick="deletePlugin()">下架插件</button>
+</div>
+
+<button class="admin-btn" onclick="showAdmin()">⚙️</button>
+
+<script>
+// 插件数据（自动解析JS头部）
+let plugins = [
+  `// ==UserScript==
+// @name         骰子增强插件
+// @author       奶KAT
+// @version      2.1.0
+// @description  为海豹Dice提供更强大的骰子功能，支持自定义公式、记录统计、快捷指令。
+// @timestamp    2026-02-22
+// @license      MIT
+// @homepageURL  https://github.com/xxx
+// @sealVersion  1.4.5
+// ==/UserScript==
+console.log("demo")`
+];
+
+// 渲染列表
+function renderList() {
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  plugins.forEach((js, idx) => {
+    const meta = parseMeta(js);
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.onclick = () => showDetail(idx);
+    card.innerHTML = `
+      <div class="card-name">${meta.name}</div>
+      <div class="card-desc">${meta.description}</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// 解析JS头部元数据
+function parseMeta(js) {
+  const lines = js.split('\n');
+  const meta = {};
+  lines.forEach(line => {
+    if (line.includes('@name')) meta.name = line.split('@name')[1].trim();
+    if (line.includes('@author')) meta.author = line.split('@author')[1].trim();
+    if (line.includes('@version')) meta.version = line.split('@version')[1].trim();
+    if (line.includes('@description')) meta.description = line.split('@description')[1].trim();
+    if (line.includes('@timestamp')) meta.time = line.split('@timestamp')[1].trim();
+    if (line.includes('@license')) meta.license = line.split('@license')[1].trim();
+    if (line.includes('@sealVersion')) meta.sealver = line.split('@sealVersion')[1].trim();
+  });
+  return meta;
+}
+
+// 显示详情
+function showDetail(index) {
+  document.getElementById('list').style.display = 'none';
+  const d = document.getElementById('detail');
+  d.classList.add('active');
+  const js = plugins[index];
+  const meta = parseMeta(js);
+  document.getElementById('d-name').innerText = meta.name;
+  document.getElementById('d-desc').innerText = meta.description;
+  
+  let tags = '';
+  tags += `<span class="tag tag-name">${meta.name}</span>`;
+  tags += `<span class="tag tag-author">${meta.author}</span>`;
+  tags += `<span class="tag tag-version">v${meta.version}</span>`;
+  if (meta.time) tags += `<span class="tag tag-time">${meta.time}</span>`;
+  if (meta.license) tags += `<span class="tag tag-license">${meta.license}</span>`;
+  if (meta.sealver) tags += `<span class="tag tag-sealver">海豹 ${meta.sealver}</span>`;
+  document.getElementById('d-tags').innerHTML = tags;
+  
+  document.getElementById('d-down').onclick = () => download(js, meta.name + '.js');
+}
+
+// 返回
+function goBack() {
+  document.getElementById('detail').classList.remove('active');
+  document.getElementById('list').style.display = 'grid';
+}
+
+// 下载文件
+function download(text, name) {
+  const a = document.createElement('a');
+  const blob = new Blob([text], {type: 'text/javascript'});
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+}
+
+// 管理员
+function showAdmin() {
+  document.getElementById('admin').classList.add('active');
+}
+
+// 前端模拟验证码（真实发邮件需后端）
+function checkCode() {
+  const code = document.getElementById('code').value;
+  if (code === 'NAIKAT2026') {
+    alert('登录成功！');
+  } else {
+    alert('验证码错误');
+  }
+}
+
+// 上架插件
+function uploadPlugin() {
+  const code = document.getElementById('js-code').value;
+  if (!code) return alert('请粘贴JS代码');
+  plugins.push(code);
+  renderList();
+  alert('上架成功！');
+}
+
+// 下架插件（简易版）
+function deletePlugin() {
+  plugins.pop();
+  renderList();
+  alert('已删除最后一个插件（演示）');
+}
+
+// 初始化
+renderList();
+</script>
+</body>
+</html>
